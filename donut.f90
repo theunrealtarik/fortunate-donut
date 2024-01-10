@@ -2,11 +2,6 @@ program donut
   implicit none
   real :: A = 1.0
   real :: B = 2.0
-  character(len=1) :: escape_char
-  character(len=100) :: clear_seq
-  
-  escape_char = achar(27)
-  clear_seq = escape_char
 
   do  
     call system("clear")
