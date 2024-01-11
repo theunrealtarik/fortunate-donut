@@ -7,8 +7,8 @@ program donut
   do  
     call system("clear")
     call render_frame(A, B)
-    ! A = A + 0.01
-    ! B = B + 0.04
+    A = A + 0.01
+    B = B + 0.04
   end do
 contains
   subroutine render_frame(A,B)
