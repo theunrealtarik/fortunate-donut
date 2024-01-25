@@ -4,7 +4,7 @@ program donut
   real :: B = 1.5
 
     call render_frame(A, B)
-  do  
+  do
     call system("clear")
     call render_frame(A, B)
     A = A + 0.01
@@ -24,34 +24,34 @@ contains
     real :: circlex, circley, x, y, z, az
     real :: lum, lumA, lumB, lumC
     integer :: xp, yp, lum_idx
-    
-    real, intent(in) :: A 
+
+    real, intent(in) :: A
     real, intent(in) :: B
     real :: cosA, sinA, cosB, sinB
     real :: R1, R2, K2
     real :: K1
 
-    character, dimension(SCREEN_WIDTH,SCREEN_HEIGHT) :: output 
+    character, dimension(SCREEN_WIDTH,SCREEN_HEIGHT) :: output
     integer, dimension(SCREEN_WIDTH,SCREEN_HEIGHT) :: zbuffer = 0
     integer, dimension(SCREEN_WIDTH,SCREEN_HEIGHT) :: shades = 0
     integer :: colors(12)
     character(len=12) :: characters = ".,-~:;=!*#$@"
 
-    integer :: i 
+    integer :: i
     integer :: j
     character(len=10) :: color
 
     output = " "
     colors = [53, 54, 55, 56, 57, 90, 91, 92, 93, 127, 128, 129]
 
-    R1 = 1 
+    R1 = 1
     R2 = 2
     K2 = 120
 
     K1 = SCREEN_WIDTH * K2 * 3 / (8 * (R1 + R2))
-    
+
     cosA = cos(A)
-    cosB = cos(B)  
+    cosB = cos(B)
     sinA = sin(A)
     sinB = sin(B)
 
@@ -65,32 +65,32 @@ contains
         circlex = R2 + R1 * costheta
         circley = R1 * sintheta
 
-        x = circlex * (cosB * cosphi + sinA *sinB * sinphi) - circley * cosA * sinB
+        x = circlex * (cosB * cosphi + sinA * sinB * sinphi) - circley * cosA * sinB
         y = circlex * (sinB * cosphi - sinA * cosB * sinphi) + circley * cosA * cosB
-        z = K2 + cosA * circlex * sinphi + circley * sinA   
+        z = K2 + cosA * circlex * sinphi + circley * sinA
         az = 1.0 / z
 
         xp = int(SCREEN_WIDTH / 2 + (K1 * x * az))
         yp = int(SCREEN_HEIGHT / 2 - (K1 * y * az))
 
-        lumA = cosphi*costheta*sinB
-        lumB = cosA * costheta * sinphi - sinA * sintheta
-        lumC = cosB * (cosA * sintheta - costheta * sinA * sinphi)
-        
+        lumA = cosphi * costheta * sinB - sinA * sintheta
+        lumB = cosB * costheta * sinphi * sinA
+        lumC = cosA * (cosB * sintheta - costheta * sinphi)
+
         lum = lumA - lumB + lumC
-       
+
         if (xp >= 1 .and. xp <= SCREEN_WIDTH .and. yp >= 1 .and. yp <= SCREEN_HEIGHT) then
           if (lum > 0) then
             if (az > zbuffer(xp, yp)) then
-              zbuffer(xp, yp) = az            
+              zbuffer(xp, yp) = az
               lum_idx = int(lum * 8)
-              if(lum_idx >= 0 .and. lum_idx < 12) then
+              if(lum_idx >= 0) then
                 output(xp, yp) = characters(lum_idx+1:lum_idx+1)
-                shades(xp, yp) = colors(lum_idx + 1) 
+                shades(xp, yp) = colors(lum_idx + 1)
               end if
             end if
-          end if 
-        end if    
+          end if
+        end if
       end do
     end do
 
@@ -99,7 +99,7 @@ contains
         write(color, '(I0)') shades(i,j)
         write(*,'(A)',advance='no') achar(27)//'[38;5;'//trim(color)//'m'//output(i,j)//achar(27)//'[0m'
       end do
-      print *, "" 
+      print *, ""
     end do
   end subroutine render_frame
 end program donut
