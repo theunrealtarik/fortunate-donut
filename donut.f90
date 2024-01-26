@@ -73,8 +73,8 @@ contains
         xp = int(SCREEN_WIDTH / 2 + (K1 * x * az))
         yp = int(SCREEN_HEIGHT / 2 - (K1 * y * az))
 
-        lumA = cosphi * costheta * sinB - sinA * sintheta
-        lumB = cosB * costheta * sinphi * sinA
+        lumA = cosphi * costheta * sinB
+        lumB = cosB * costheta * sinphi * sinA - sinA * sintheta
         lumC = cosA * (cosB * sintheta - costheta * sinphi)
 
         lum = lumA - lumB + lumC
